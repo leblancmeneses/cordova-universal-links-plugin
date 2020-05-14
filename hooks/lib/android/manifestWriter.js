@@ -3,6 +3,7 @@ Class injects plugin preferences into AndroidManifest.xml file.
 */
 
 var path = require('path');
+var semver = require('semver');
 var xmlHelper = require('../xmlHelper.js');
 
 module.exports = {
@@ -19,6 +20,10 @@ module.exports = {
  */
 function writePreferences(cordovaContext, pluginPreferences) {
   var pathToManifest = path.join(cordovaContext.opts.projectRoot, 'platforms', 'android', 'AndroidManifest.xml');
+  if (semver.gte(cordovaContext.opts.cordova.version, '9.0.0')) {
+    pathToManifest = path.join(cordovaContext.opts.projectRoot, 'platforms', 'android', 'app', 'src', 'main', 'AndroidManifest.xml');
+  }
+
   var manifestSource = xmlHelper.readXmlAsJson(pathToManifest);
   var cleanManifest;
   var updatedManifest;
